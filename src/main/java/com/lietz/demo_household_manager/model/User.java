@@ -20,10 +20,10 @@ public class User {
     private String password;
     private String phone;
 
-    @OneToMany(mappedBy = "assigned", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
     private List<Task> assignedTasks;
 
-    @OneToMany(mappedBy = "completed", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "executor", cascade = CascadeType.ALL)
     private List<Task> completedTasks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
