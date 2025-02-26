@@ -1,10 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Task form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${task.id == null ? 'Create New Task' : 'Edit Task'}"></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/tasks}">Tasks</a></li>
+            <li class="breadcrumb-item active" aria-current="page"
+                th:text="${task.id == null ? 'Create New Task' : 'Edit: ' + task.title}"></li>
+        </ol>
+    </nav>
 
+    <div class="card">
+        <div class="card-header">
+            <h2 th:text="${task.id == null ? 'Create New Task' : 'Edit Task'}" class="mb-0"></h2>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/tasks}" method="post" th:object="${task}">
+                <input type="hidden" th:field="*{id}" />
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="4"></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" th:field="*{category}">
+                            <option value="">-- Select a category --</option>
+                            <option th:each="categoryOption : ${categories}"
+                                    th:value="${categoryOption}"
+                                    th:text="${categoryOption}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="dueDate" class="form-label">Due Date</label>
+                        <input type="text" class="form-control datepicker" id="dueDate" th:field="*{dueDate}"
+                               placeholder="YYYY-MM-DD HH:MM">
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="assignee" class="form-label">Assignee</label>
+                        <select class="form-select" id="assignee" th:field="*{assignee}">
+                            <option value="">-- Unassigned --</option>
+                            <option th:each="user : ${users}"
+                                    th:value="${user.id}"
+                                    th:text="${user.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="executor" class="form-label">Executor</label>
+                        <select class="form-select" id="executor" th:field="*{executor}">
+                            <option value="">-- Unassigned --</option>
+                            <option th:each="user : ${users}"
+                                    th:value="${user.id}"
+                                    th:text="${user.name}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <span th:text="${task.id == null ? 'Create Task' : 'Update Task'}"></span>
+                    </button>
+                    <a th:href="@{/tasks}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr('.datepicker', {
+            enableTime: true,
+            dateFormat: 'Y-m-d H:i',
+            time_24hr: true
+        });
+    });
+</script>
 </body>
 </html>
